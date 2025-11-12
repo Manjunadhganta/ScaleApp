@@ -363,6 +363,137 @@
 
 // export default Auth;
 
+// import React from "react";
+// import { useLocation, useNavigate } from "react-router-dom";
+// import axios from "axios";
+
+// const Auth = () => {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const initialState = location.pathname === "/register" ? "register" : "login";
+//   const [state, setState] = React.useState(initialState);
+
+//   const [data, setData] = React.useState({
+//     name: "",
+//     email: "",
+//     password: "",
+//   });
+
+//   const onChangeHandler = (e) => {
+//     setData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+
+//     try {
+//       if (state === "register") {
+//         const result = await axios.post("http://localhost:3001/register", data);
+
+//         if (result.data.message === "Success") {
+//           alert("Registration successful! Please log in.");
+//           setState("login");
+//           navigate("/login");
+//         } else {
+//           alert(result.data.message);
+//         }
+//       } else {
+//         const result = await axios.post("http://localhost:3001/login", data);
+
+//         if (result.data.message === "Success") {
+//           navigate("/dashboard");
+//         } else {
+//           alert(result.data.message);
+//         }
+//       }
+//     } catch (err) {
+//       console.error(err);
+//       alert("Something went wrong. Please try again later.");
+//     }
+//   };
+
+//   return (
+//     <div className="min-h-screen flex items-center justify-center bg-zinc-950 text-white">
+//       <form
+//         id="auth"
+//         onSubmit={handleSubmit}
+//         className="w-full sm:w-[350px] text-center border border-zinc-800 rounded-2xl px-8 py-10 bg-zinc-900 shadow-lg"
+//       >
+//         <h1 className="text-white text-3xl font-medium">
+//           {state === "login" ? "Login" : "Register"}
+//         </h1>
+//         <p className="text-zinc-400 text-sm mt-2 pb-6">
+//           Please {state === "login" ? "sign in" : "sign up"} to continue
+//         </p>
+
+//         {state !== "login" && (
+//           <div className="flex items-center w-full mt-4 bg-zinc-800 border border-zinc-700 h-12 rounded-full overflow-hidden pl-6 gap-2">
+//             <input
+//               type="text"
+//               placeholder="Name"
+//               className="bg-transparent text-white placeholder-zinc-400 outline-none text-sm w-full h-full"
+//               name="name"
+//               value={data.name}
+//               onChange={onChangeHandler}
+//               required
+//             />
+//           </div>
+//         )}
+
+//         <div className="flex items-center w-full mt-4 bg-zinc-800 border border-zinc-700 h-12 rounded-full overflow-hidden pl-6 gap-2">
+//           <input
+//             type="email"
+//             placeholder="Email"
+//             className="bg-transparent text-white placeholder-zinc-400 outline-none text-sm w-full h-full"
+//             name="email"
+//             value={data.email}
+//             onChange={onChangeHandler}
+//             required
+//           />
+//         </div>
+
+//         <div className="flex items-center mt-4 w-full bg-zinc-800 border border-zinc-700 h-12 rounded-full overflow-hidden pl-6 gap-2">
+//           <input
+//             type="password"
+//             placeholder="Password"
+//             className="bg-transparent text-white placeholder-zinc-400 outline-none text-sm w-full h-full"
+//             name="password"
+//             value={data.password}
+//             onChange={onChangeHandler}
+//             required
+//           />
+//         </div>
+
+//         <button
+//           type="submit"
+//           className="mt-6 w-full h-11 rounded-full text-white bg-indigo-600 hover:bg-indigo-500 transition"
+//         >
+//           {state === "login" ? "Login" : "Create Account"}
+//         </button>
+
+//         <p className="text-zinc-400 text-sm mt-4">
+//           {state === "login"
+//             ? "Don't have an account? "
+//             : "Already have an account? "}
+//           <button
+//             type="button"
+//             className="text-indigo-400"
+//             onClick={() =>
+//               setState((prev) => (prev === "login" ? "register" : "login"))
+//             }
+//           >
+//             {state === "login" ? "Register" : "Login"}
+//           </button>
+//         </p>
+//       </form>
+//     </div>
+//   );
+// };
+
+// export default Auth;
+
+
+
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -387,24 +518,24 @@ const Auth = () => {
     e.preventDefault();
 
     try {
-      if (state === "register") {
-        const result = await axios.post("http://localhost:3001/register", data);
+      const url =
+        state === "register"
+          ? `${import.meta.env.VITE_BASE_URL}/register`
+          : `${import.meta.env.VITE_BASE_URL}/login`;
 
-        if (result.data.message === "Success") {
+      const result = await axios.post(url, data);
+
+      if (result.data.message === "Success") {
+        if (state === "register") {
           alert("Registration successful! Please log in.");
           setState("login");
           navigate("/login");
         } else {
-          alert(result.data.message);
+          alert("Login successful!");
+          navigate("/dashboard");
         }
       } else {
-        const result = await axios.post("http://localhost:3001/login", data);
-
-        if (result.data.message === "Success") {
-          navigate("/dashboard");
-        } else {
-          alert(result.data.message);
-        }
+        alert(result.data.message || "Something went wrong.");
       }
     } catch (err) {
       console.error(err);
