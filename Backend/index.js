@@ -233,60 +233,60 @@
 
 
 
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const bcrypt = require("bcrypt");
-const UserModel = require("./models/Users");
-require("dotenv").config(); 
+// const express = require("express");
+// const mongoose = require("mongoose");
+// const cors = require("cors");
+// const bcrypt = require("bcrypt");
+// const UserModel = require("./models/Users");
+// require("dotenv").config(); 
 
-const app = express();
-app.use(express.json());
-app.use(cors());
+// const app = express();
+// app.use(express.json());
+// app.use(cors());
 
-const saltRounds = 10;
+// const saltRounds = 10;
 
 
-mongoose
-  .connect(process.env.atlas_URL)
-  .then(() => console.log(" Connected to MongoDB Atlas"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+// mongoose
+//   .connect(process.env.atlas_URL)
+//   .then(() => console.log(" Connected to MongoDB Atlas"))
+//   .catch((err) => console.error("MongoDB connection error:", err));
 
-app.post("/register", async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
+// app.post("/register", async (req, res) => {
+//   try {
+//     const { name, email, password } = req.body;
 
-    const existingUser = await UserModel.findOne({ email });
-    if (existingUser) return res.json({ message: "User already exists" });
+//     const existingUser = await UserModel.findOne({ email });
+//     if (existingUser) return res.json({ message: "User already exists" });
 
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-    await UserModel.create({ name, email, password: hashedPassword });
+//     const hashedPassword = await bcrypt.hash(password, saltRounds);
+//     await UserModel.create({ name, email, password: hashedPassword });
 
-    res.json({ message: "Success" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
-  }
-});
+//     res.json({ message: "Success" });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// });
 
-app.post("/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
+// app.post("/login", async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
 
-    const user = await UserModel.findOne({ email });
-    if (!user) return res.json({ message: "No record existed" });
+//     const user = await UserModel.findOne({ email });
+//     if (!user) return res.json({ message: "No record existed" });
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.json({ message: "The password is incorrect" });
+//     const isMatch = await bcrypt.compare(password, user.password);
+//     if (!isMatch) return res.json({ message: "The password is incorrect" });
 
-    
-    res.json({ message: "Success", user });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
-  }
-});
 
-app.listen(3001, () => {
-  console.log("Server running on port 3001");
-});
+//     res.json({ message: "Success", user });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// });
+
+// app.listen(3001, () => {
+//   console.log("Server running on port 3001");
+// });
